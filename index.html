@@ -3,145 +3,178 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>プラモデル塗料対応表｜クレオス・タミヤ・ファレホの色番号をスマホで検索</title>
+  <title>レザークラフト計算ツール｜革の必要量・ステッチ数・糸の長さを自動計算</title>
   <meta name="google-site-verification" content="AePOnuSo4vvO81fknjDi69dxaGotLgwNUbQGqx0IymU" />
-  <meta name="description" content="プラモデル塗料の色番号対応表。GSIクレオス（Mr.カラー）・タミヤカラー・ファレホの近似色をスマホで素早く検索。塗料の代替色・互換色を探せます。">
+  <meta name="description" content="レザークラフトの計算をスマホで簡単に。革の必要量・ステッチ数・縫い糸の長さ・革紐の量を自動計算。型紙のサイズを入力するだけでOK。">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
-      background: #f4f4f0;
-      color: #1a1a2e;
+      background: #f5efe6;
+      color: #2c1a0e;
       font-size: 16px;
       line-height: 1.6;
     }
     header {
-      background: linear-gradient(135deg, #2c3e50 0%, #4a5568 100%);
-      color: #e8e8d8;
+      background: linear-gradient(135deg, #3d1f0d 0%, #6b3a1f 100%);
+      color: #e8d5b0;
       padding: 24px 16px;
       text-align: center;
     }
     .header-icon { font-size: 2.2rem; margin-bottom: 8px; }
-    header h1 { font-size: 1.3rem; font-weight: bold; color: #fff; }
+    header h1 { font-size: 1.3rem; font-weight: bold; letter-spacing: 0.05em; }
     header p { font-size: 0.82rem; opacity: 0.8; margin-top: 4px; }
 
     .ad-slot {
-      background: #e8e8e0; border: 1px dashed #aaa;
-      text-align: center; padding: 12px;
-      margin: 12px 16px; color: #888;
-      font-size: 0.8rem; min-height: 90px;
-      display: flex; align-items: center; justify-content: center;
+      background: #ede5d8;
+      border: 1px dashed #c4a882;
+      text-align: center;
+      padding: 12px;
+      margin: 12px 16px;
+      color: #a07850;
+      font-size: 0.8rem;
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .ad-slot-rect { min-height: 250px; }
 
     .container { max-width: 640px; margin: 0 auto; padding: 0 16px 40px; }
 
-    /* 検索エリア */
-    .search-area {
-      background: white; border: 1px solid #ddd;
-      border-radius: 12px; padding: 16px; margin-top: 16px;
+    .tabs {
+      display: flex;
+      margin: 16px 0 0;
+      border-bottom: 2px solid #6b3a1f;
     }
-    .search-title { font-size: 0.82rem; color: #666; margin-bottom: 12px; }
+    .tab {
+      flex: 1;
+      padding: 10px 4px;
+      text-align: center;
+      font-size: 0.78rem;
+      cursor: pointer;
+      background: #fff;
+      border: 1px solid #d4b896;
+      border-bottom: none;
+      color: #8b6040;
+      transition: all 0.2s;
+    }
+    .tab.active {
+      background: #6b3a1f;
+      color: #e8d5b0;
+      font-weight: bold;
+      border-color: #6b3a1f;
+    }
+    .panel {
+      display: none;
+      background: white;
+      border: 1px solid #d4b896;
+      border-top: none;
+      padding: 20px 16px;
+      border-radius: 0 0 8px 8px;
+    }
+    .panel.active { display: block; }
 
-    .search-row { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
-    .search-row label { font-size: 0.82rem; font-weight: bold; color: #333; min-width: 80px; }
+    .panel-title { font-size: 0.95rem; font-weight: bold; color: #6b3a1f; margin-bottom: 4px; }
+    .panel-desc { font-size: 0.8rem; color: #a07850; margin-bottom: 16px; }
 
-    select, input[type="text"] {
-      flex: 1; padding: 10px 12px;
-      border: 1.5px solid #ccc; border-radius: 6px;
-      font-size: 0.95rem; background: #fafafa;
+    .sec-label {
+      font-size: 0.75rem; font-weight: bold; color: #8b4513;
+      border-left: 3px solid #8b4513; padding-left: 8px;
+      margin-bottom: 12px;
+    }
+
+    .form-group { margin-bottom: 14px; }
+    label { display: block; font-size: 0.82rem; font-weight: bold; margin-bottom: 5px; color: #4a2810; }
+    .label-sub { font-weight: normal; color: #a07850; font-size: 0.75rem; }
+
+    .input-row { display: flex; align-items: center; gap: 8px; }
+    input[type="number"], select {
+      width: 100%; padding: 10px 12px;
+      border: 1.5px solid #d4b896; border-radius: 6px;
+      font-size: 1rem; background: #fdf8f3; color: #2c1a0e;
       -webkit-appearance: none;
     }
-    select:focus, input:focus { outline: none; border-color: #4a5568; }
+    input:focus, select:focus { outline: none; border-color: #8b4513; }
+    .unit { white-space: nowrap; color: #8b6040; font-size: 0.88rem; min-width: 40px; }
 
-    .search-btn {
-      width: 100%; padding: 13px;
-      background: linear-gradient(135deg, #2c3e50, #4a5568);
-      color: white; border: none; border-radius: 8px;
+    .divider { border: none; border-top: 1px solid #e8d5b0; margin: 14px 0; }
+
+    .part-row {
+      display: flex; gap: 8px; margin-bottom: 8px; align-items: center;
+    }
+    .part-row input { flex: 1; }
+    .part-row .x { color: #a07850; font-size: 0.9rem; }
+
+    .add-btn {
+      width: 100%; padding: 8px;
+      background: #f5efe6; border: 1.5px dashed #c4a882;
+      border-radius: 6px; color: #8b6040; font-size: 0.85rem;
+      cursor: pointer; margin-bottom: 12px;
+    }
+
+    .calc-btn {
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, #6b3a1f, #8b4513);
+      color: #e8d5b0; border: none; border-radius: 8px;
       font-size: 1rem; font-weight: bold; cursor: pointer;
-      margin-top: 4px; letter-spacing: 0.05em;
+      box-shadow: 0 3px 8px rgba(107,58,31,0.3);
+      letter-spacing: 0.05em;
     }
-    .search-btn:active { opacity: 0.85; }
+    .calc-btn:active { opacity: 0.85; }
 
-    /* 結果エリア */
-    .results { margin-top: 16px; }
-    .result-count { font-size: 0.8rem; color: #888; margin-bottom: 8px; }
-
-    .color-card {
-      background: white; border: 1px solid #ddd;
-      border-radius: 10px; padding: 14px;
-      margin-bottom: 10px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    .result-box {
+      display: none;
+      background: #3d1f0d;
+      border-radius: 10px; padding: 18px;
+      margin-top: 16px; color: #e8d5b0;
     }
-    .color-header {
-      display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
-    }
-    .color-swatch {
-      width: 40px; height: 40px; border-radius: 6px;
-      border: 1px solid rgba(0,0,0,0.15); flex-shrink: 0;
-    }
-    .color-main { flex: 1; }
-    .color-name { font-size: 0.95rem; font-weight: bold; color: #1a1a2e; }
-    .color-num { font-size: 0.78rem; color: #666; margin-top: 2px; }
-
-    .equiv-list { border-top: 1px solid #eee; padding-top: 10px; }
-    .equiv-title { font-size: 0.72rem; color: #888; margin-bottom: 6px; }
-    .equiv-row {
-      display: flex; align-items: center; gap: 8px;
-      margin-bottom: 6px; padding: 6px 8px;
-      background: #f8f8f4; border-radius: 6px;
-    }
-    .equiv-swatch {
-      width: 24px; height: 24px; border-radius: 4px;
-      border: 1px solid rgba(0,0,0,0.1); flex-shrink: 0;
-    }
-    .equiv-maker { font-size: 0.72rem; color: #888; min-width: 80px; }
-    .equiv-info { flex: 1; font-size: 0.82rem; color: #333; }
-    .equiv-match {
-      font-size: 0.7rem; padding: 2px 6px;
-      border-radius: 4px; font-weight: bold;
-    }
-    .match-high { background: #d4edda; color: #155724; }
-    .match-mid  { background: #fff3cd; color: #856404; }
-    .match-low  { background: #f8d7da; color: #721c24; }
-
-    .no-result {
-      text-align: center; padding: 32px; color: #888;
-      background: white; border-radius: 10px;
-      border: 1px solid #ddd;
+    .result-box.show { display: block; }
+    .result-title { font-size: 0.78rem; color: #c4a882; text-align: center; margin-bottom: 12px; letter-spacing: 0.1em; }
+    .result-big { text-align: center; margin-bottom: 14px; }
+    .result-num { font-size: 2.8rem; font-weight: bold; color: #e8d5b0; }
+    .result-unit-big { font-size: 1rem; color: #c4a882; }
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .result-card { background: rgba(255,255,255,0.08); border-radius: 8px; padding: 10px; text-align: center; }
+    .rc-label { font-size: 0.72rem; color: #c4a882; margin-bottom: 4px; }
+    .rc-value { font-size: 1.4rem; font-weight: bold; color: #e8d5b0; }
+    .rc-unit { font-size: 0.72rem; color: #c4a882; }
+    .result-note { font-size: 0.72rem; color: #a07850; text-align: center; margin-top: 10px; }
+    .result-tip {
+      background: rgba(196,168,130,0.15); border-left: 3px solid #c4a882;
+      border-radius: 0 6px 6px 0; padding: 8px 12px;
+      margin-top: 10px; font-size: 0.78rem; color: #e8d5b0;
     }
 
-    /* 凡例 */
-    .legend {
-      display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;
+    .howto {
+      background: white; border: 1px solid #d4b896;
+      border-radius: 8px; padding: 16px; margin-top: 16px;
     }
-    .legend-item { display: flex; align-items: center; gap: 4px; font-size: 0.72rem; }
+    .howto h2 { font-size: 0.95rem; color: #6b3a1f; margin-bottom: 10px; }
+    .howto li { font-size: 0.82rem; color: #555; line-height: 1.7; margin-left: 1.2em; }
 
-    .faq-box { background: #f8f8f4; border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-top: 16px; }
-    .faq-box h2 { font-size: 1rem; color: #2c3e50; margin-bottom: 16px; }
-    .faq-q { font-weight: bold; color: #4a5568; font-size: 0.9rem; margin-bottom: 6px; }
+    .faq-box {
+      background: #fdf8f3; border: 1px solid #d4b896;
+      border-radius: 8px; padding: 20px; margin-top: 16px;
+    }
+    .faq-box h2 { font-size: 1rem; color: #6b3a1f; margin-bottom: 16px; }
+    .faq-q { font-weight: bold; color: #8b4513; font-size: 0.9rem; margin-bottom: 6px; }
     .faq-a { font-size: 0.82rem; color: #555; line-height: 1.7; margin-bottom: 16px; }
 
-    .note-box {
-      background: #fff8dc; border: 1px solid #ddd;
-      border-radius: 8px; padding: 12px 14px;
-      margin-top: 12px; font-size: 0.78rem; color: #666;
-    }
-
     footer {
-      background: #2c3e50; color: #aaa;
+      background: #3d1f0d; color: #c4a882;
       text-align: center; padding: 20px;
       font-size: 0.75rem; margin-top: 32px;
     }
-    footer a { color: #aaa; }
+    footer a { color: #c4a882; }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="header-icon">🎨</div>
-  <h1>プラモデル塗料対応表</h1>
-  <p>クレオス・タミヤ・ファレホの近似色を検索</p>
+  <div class="header-icon">🧵</div>
+  <h1>レザークラフト計算ツール</h1>
+  <p>革の必要量・ステッチ数・糸の長さを自動計算</p>
 </header>
 
 <div style="max-width:640px; margin:0 auto;">
@@ -150,63 +183,196 @@
 
 <div class="container">
 
-  <!-- 検索 -->
-  <div class="search-area">
-    <div class="search-title">色名・番号・メーカーで検索できます</div>
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab(0)">革の必要量</div>
+    <div class="tab" onclick="switchTab(1)">ステッチ計算</div>
+    <div class="tab" onclick="switchTab(2)">糸の長さ</div>
+  </div>
 
-    <div class="search-row">
-      <label>メーカー</label>
-      <select id="s_maker">
-        <option value="all">すべて</option>
-        <option value="mr">クレオス Mr.カラー</option>
-        <option value="tamiya_a">タミヤ アクリル</option>
-        <option value="tamiya_l">タミヤ ラッカー</option>
-        <option value="vallejo">ファレホ</option>
+  <!-- パネル1：革の必要量 -->
+  <div class="panel active" id="panel0">
+    <div class="panel-title">革の必要量計算</div>
+    <div class="panel-desc">各パーツのサイズを入力すると必要な革の面積が計算できます</div>
+
+    <div class="sec-label">パーツのサイズ（縦×横）</div>
+    <div id="parts-list">
+      <div class="part-row">
+        <input type="number" placeholder="縦(cm)" class="part-h" min="0.1" step="0.1">
+        <span class="x">×</span>
+        <input type="number" placeholder="横(cm)" class="part-w" min="0.1" step="0.1">
+        <input type="number" placeholder="枚数" class="part-n" min="1" value="1" style="max-width:60px;">
+      </div>
+    </div>
+    <button class="add-btn" onclick="addPart()">＋ パーツを追加</button>
+
+    <div class="form-group">
+      <label>ロス率 <span class="label-sub">（裁断の無駄・余白の割合）</span></label>
+      <select id="p1_loss">
+        <option value="1.1">10%（シンプルなパーツ）</option>
+        <option value="1.2" selected>20%（標準）</option>
+        <option value="1.3">30%（複雑な形・曲線多め）</option>
+        <option value="1.4">40%（端切れを活用する場合）</option>
       </select>
     </div>
 
-    <div class="search-row">
-      <label>色名・番号</label>
-      <input type="text" id="s_query" placeholder="例：ホワイト、C1、XF-2..." oninput="searchPaints()">
+    <button class="calc-btn" onclick="calcLeather()">🧵 革の必要量を計算する</button>
+
+    <div class="result-box" id="p1_result">
+      <div class="result-title">必要な革の面積（目安）</div>
+      <div class="result-big">
+        <span class="result-num" id="p1_area">-</span>
+        <span class="result-unit-big">cm²</span>
+      </div>
+      <div class="result-grid">
+        <div class="result-card">
+          <div class="rc-label">デシ換算</div>
+          <div class="rc-value" id="p1_deci">-</div>
+          <div class="rc-unit">ds（デシ）</div>
+        </div>
+        <div class="result-card">
+          <div class="rc-label">パーツ合計面積</div>
+          <div class="rc-value" id="p1_net">-</div>
+          <div class="rc-unit">cm²</div>
+        </div>
+      </div>
+      <div class="result-tip" id="p1_tip">-</div>
+      <div class="result-note">※デシ（ds）= 10cm×10cm = 100cm²。革の販売単位としてよく使われます。</div>
+    </div>
+  </div>
+
+  <!-- パネル2：ステッチ計算 -->
+  <div class="panel" id="panel1">
+    <div class="panel-title">ステッチ数・縫い穴の数を計算</div>
+    <div class="panel-desc">縫う長さと縫い目の間隔から必要な穴の数を計算します</div>
+
+    <div class="form-group">
+      <label>縫う長さ</label>
+      <div class="input-row">
+        <input type="number" id="p2_length" placeholder="例：20" min="0.1" step="0.1">
+        <span class="unit">cm</span>
+      </div>
     </div>
 
-    <button class="search-btn" onclick="searchPaints()">🎨 検索する</button>
-  </div>
+    <div class="form-group">
+      <label>縫い目の間隔 <span class="label-sub">（ピッチ）</span></label>
+      <select id="p2_pitch">
+        <option value="2">2mm（細かい・財布・小物）</option>
+        <option value="3" selected>3mm（標準・最もよく使う）</option>
+        <option value="4">4mm（粗め・バッグ・厚革）</option>
+        <option value="5">5mm（荒縫い・デコラティブ）</option>
+        <option value="custom">その他（間隔を入力）</option>
+      </select>
+    </div>
 
-  <!-- 凡例 -->
-  <div class="legend" style="margin-top:12px;">
-    <div class="legend-item"><span class="equiv-match match-high">近似</span>ほぼ同じ色</div>
-    <div class="legend-item"><span class="equiv-match match-mid">類似</span>似た色味</div>
-    <div class="legend-item"><span class="equiv-match match-low">参考</span>参考程度</div>
-  </div>
+    <div class="form-group" id="p2_custom_wrap" style="display:none;">
+      <label>間隔を入力</label>
+      <div class="input-row">
+        <input type="number" id="p2_custom_pitch" placeholder="例：3.5" min="1" step="0.5">
+        <span class="unit">mm</span>
+      </div>
+    </div>
 
-  <!-- 結果 -->
-  <div class="results" id="results">
-    <div class="no-result">
-      色名や番号を入力して検索してください<br>
-      <small>例：ホワイト / C1 / XF-1 / White</small>
+    <button class="calc-btn" onclick="calcStitch()">🔨 ステッチ数を計算する</button>
+
+    <div class="result-box" id="p2_result">
+      <div class="result-title">必要なステッチ数・縫い穴の数</div>
+      <div class="result-grid">
+        <div class="result-card">
+          <div class="rc-label">縫い穴の数</div>
+          <div class="rc-value" id="p2_holes">-</div>
+          <div class="rc-unit">個</div>
+        </div>
+        <div class="result-card">
+          <div class="rc-label">ステッチ数</div>
+          <div class="rc-value" id="p2_stitches">-</div>
+          <div class="rc-unit">目</div>
+        </div>
+      </div>
+      <div class="result-note">※両端に穴を含めた数です。実際の作品に合わせて調整してください。</div>
     </div>
   </div>
 
-  <div class="note-box">
-    ⚠️ 掲載している対応色はあくまで近似色です。完全に同じ色ではありません。実際の発色はロット・希釈具合によって異なります。重要な作品は実際に塗り比べてご確認ください。
+  <!-- パネル3：糸の長さ -->
+  <div class="panel" id="panel2">
+    <div class="panel-title">縫い糸の必要量を計算</div>
+    <div class="panel-desc">縫う長さと革の厚さから必要な糸の長さを計算します</div>
+
+    <div class="form-group">
+      <label>縫う長さ（合計）</label>
+      <div class="input-row">
+        <input type="number" id="p3_length" placeholder="例：20" min="0.1" step="0.1">
+        <span class="unit">cm</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>革の厚さ（縫い合わせる2枚の合計）</label>
+      <select id="p3_thickness">
+        <option value="1">〜1mm（薄革・ラミー等）</option>
+        <option value="2" selected>1〜2mm（標準的な厚さ）</option>
+        <option value="3">2〜3mm（厚革・ヌメ革等）</option>
+        <option value="4">3〜4mm（厚手・重ね合わせ）</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>縫い方</label>
+      <select id="p3_method">
+        <option value="4" selected>平縫い（サドルステッチ）×4倍</option>
+        <option value="3">片側縫い ×3倍</option>
+      </select>
+    </div>
+
+    <button class="calc-btn" onclick="calcThread()">🧶 糸の長さを計算する</button>
+
+    <div class="result-box" id="p3_result">
+      <div class="result-title">必要な縫い糸の長さ</div>
+      <div class="result-big">
+        <span class="result-num" id="p3_thread">-</span>
+        <span class="result-unit-big">cm</span>
+      </div>
+      <div class="result-grid">
+        <div class="result-card">
+          <div class="rc-label">メートル換算</div>
+          <div class="rc-value" id="p3_thread_m">-</div>
+          <div class="rc-unit">m</div>
+        </div>
+        <div class="result-card">
+          <div class="rc-label">余裕を持った長さ</div>
+          <div class="rc-value" id="p3_thread_extra">-</div>
+          <div class="rc-unit">m</div>
+        </div>
+      </div>
+      <div class="result-tip">💡 糸は少し長めに用意しておくと安心です。足りなくなると途中でつなぐ必要があります。</div>
+    </div>
+  </div>
+
+  <!-- 使い方 -->
+  <div class="howto">
+    <h2>📖 計算の目安について</h2>
+    <ul>
+      <li>革の必要量はロス率20%が一般的な目安です</li>
+      <li>デシ（ds）は10cm×10cm=100cm²の単位で、革の販売によく使われます</li>
+      <li>糸の長さは縫う長さの3〜4倍が目安（サドルステッチは4倍）</li>
+      <li>ステッチ間隔は作品の用途と革の厚さで選びます</li>
+    </ul>
   </div>
 
   <!-- よくある質問 -->
   <div class="faq-box">
     <h2>よくある質問</h2>
 
-    <p class="faq-q">Q. クレオスとタミヤの塗料は混ぜて使える？</p>
-    <p class="faq-a">A. 基本的には同じ系統（ラッカー同士、アクリル同士）であれば混ぜることができます。ただしメーカーが異なると溶剤の相性が悪い場合があるため、少量で試してから使うことをおすすめします。</p>
+    <p class="faq-q">Q. レザークラフトで革は何デシ必要？</p>
+    <p class="faq-a">A. 作品のパーツサイズの合計面積にロス率（20〜30%）を加えた量が必要です。このツールの「革の必要量」タブでパーツのサイズを入力すると自動でデシ換算まで計算できます。</p>
 
-    <p class="faq-q">Q. Mr.カラーの代わりにタミヤカラーを使いたい</p>
-    <p class="faq-a">A. 多くの基本色には近似色が存在します。このツールで色名や番号を検索すると代替候補が確認できます。ただし完全に同じ色ではないため、目立つ部分での使用は実際に色を確認してください。</p>
+    <p class="faq-q">Q. ステッチの間隔は何mmがいい？</p>
+    <p class="faq-a">A. 財布や小物には2〜3mm、バッグや厚革には3〜4mmが一般的です。間隔が狭いほど細かく丁寧な印象になりますが、縫い穴の数が増えます。</p>
 
-    <p class="faq-q">Q. ファレホとは何ですか？</p>
-    <p class="faq-a">A. スペインのAKインタラクティブ社が製造する水性塗料ブランドです。発色が良く、筆塗りに適しており、フィギュア塗装で人気があります。クレオスやタミヤとの近似色も多数あります。</p>
+    <p class="faq-q">Q. サドルステッチに必要な糸の長さは？</p>
+    <p class="faq-a">A. 縫う長さの約4倍が目安です。例えば20cmを縫う場合は80cm以上の糸が必要です。このツールの「糸の長さ」タブで自動計算できます。</p>
 
-    <p class="faq-q">Q. 掲載されていない色を知りたい</p>
-    <p class="faq-a" style="margin-bottom:0;">A. 現在データを随時追加中です。基本的なカラーから順次対応しています。</p>
+    <p class="faq-q">Q. 革の販売単位「デシ」とは？</p>
+    <p class="faq-a" style="margin-bottom:0;">A. デシ（ds）は10cm×10cm=100cm²の面積を表す単位です。革の販売店では「1デシ○○円」という形で価格が表示されることが多く、必要量の計算に使います。</p>
   </div>
 
 </div>
@@ -216,132 +382,93 @@
 </div>
 
 <footer>
-  <p>プラモデル塗料対応表 | クレオス・タミヤ・ファレホの近似色を検索</p>
-  <p style="margin-top:4px;">© 2026 プラモデル塗料対応表 | <a href="privacy.html">プライバシーポリシー</a></p>
+  <p>レザークラフト計算ツール | 革の必要量・ステッチ数・糸の長さを計算</p>
+  <p style="margin-top:4px;">© 2026 レザークラフト計算ツール | <a href="privacy.html">プライバシーポリシー</a></p>
 </footer>
 
 <script>
-// 塗料データベース（主要カラー）
-const PAINTS = [
-  { id:1, name:'ホワイト', hex:'#FFFFFF',
-    mr:{num:'C1', name:'ホワイト'}, tamiya_a:{num:'XF-2', name:'フラットホワイト', match:'近似'}, tamiya_l:{num:'LP-62', name:'フラットホワイト', match:'近似'}, vallejo:{num:'70.951', name:'White', match:'近似'} },
-  { id:2, name:'ブラック', hex:'#1a1a1a',
-    mr:{num:'C2', name:'ブラック'}, tamiya_a:{num:'XF-1', name:'フラットブラック', match:'近似'}, tamiya_l:{num:'LP-6', name:'セミグロスブラック', match:'類似'}, vallejo:{num:'70.950', name:'Black', match:'近似'} },
-  { id:3, name:'レッド', hex:'#CC0000',
-    mr:{num:'C3', name:'レッド'}, tamiya_a:{num:'X-7', name:'レッド', match:'近似'}, tamiya_l:{num:'LP-47', name:'クリアレッド', match:'参考'}, vallejo:{num:'70.926', name:'Red', match:'近似'} },
-  { id:4, name:'イエロー', hex:'#FFD700',
-    mr:{num:'C4', name:'イエロー'}, tamiya_a:{num:'X-8', name:'レモンイエロー', match:'類似'}, tamiya_l:{num:'LP-48', name:'クリアイエロー', match:'参考'}, vallejo:{num:'70.952', name:'Lemon Yellow', match:'類似'} },
-  { id:5, name:'ブルー', hex:'#0033CC',
-    mr:{num:'C5', name:'ブルー'}, tamiya_a:{num:'X-4', name:'ブルー', match:'近似'}, tamiya_l:{num:'LP-22', name:'レーシングブルー', match:'類似'}, vallejo:{num:'70.925', name:'Blue', match:'近似'} },
-  { id:6, name:'グリーン', hex:'#006600',
-    mr:{num:'C6', name:'グリーン'}, tamiya_a:{num:'XF-5', name:'フラットグリーン', match:'近似'}, tamiya_l:{num:'LP-28', name:'フラットグリーン', match:'近似'}, vallejo:{num:'70.970', name:'Deep Green', match:'類似'} },
-  { id:7, name:'オレンジ', hex:'#FF8000',
-    mr:{num:'C8', name:'オレンジ'}, tamiya_a:{num:'X-6', name:'オレンジ', match:'近似'}, tamiya_l:{num:'LP-46', name:'クリアオレンジ', match:'参考'}, vallejo:{num:'70.981', name:'Orange Brown', match:'類似'} },
-  { id:8, name:'シルバー', hex:'#C0C0C0',
-    mr:{num:'C8', name:'シルバー'}, tamiya_a:{num:'X-11', name:'クロームシルバー', match:'近似'}, tamiya_l:{num:'LP-11', name:'クロームシルバー', match:'近似'}, vallejo:{num:'70.997', name:'Silver', match:'近似'} },
-  { id:9, name:'ゴールド', hex:'#D4AF37',
-    mr:{num:'C9', name:'ゴールド'}, tamiya_a:{num:'X-12', name:'ゴールドリーフ', match:'近似'}, tamiya_l:{num:'LP-12', name:'ゴールド', match:'近似'}, vallejo:{num:'70.996', name:'Gold', match:'近似'} },
-  { id:10, name:'フラットブラウン', hex:'#7B3F00',
-    mr:{num:'C22', name:'ダルレッド'}, tamiya_a:{num:'XF-10', name:'フラットブラウン', match:'類似'}, tamiya_l:{num:'LP-29', name:'フラットブラウン', match:'近似'}, vallejo:{num:'70.984', name:'Flat Brown', match:'近似'} },
-  { id:11, name:'カーキ', hex:'#8B8000',
-    mr:{num:'C55', name:'カーキ'}, tamiya_a:{num:'XF-49', name:'カーキ', match:'近似'}, tamiya_l:{num:'LP-53', name:'カーキ', match:'近似'}, vallejo:{num:'70.988', name:'Khaki', match:'近似'} },
-  { id:12, name:'グレー', hex:'#808080',
-    mr:{num:'C13', name:'ニュートラルグレー'}, tamiya_a:{num:'XF-22', name:'RLMグレー', match:'類似'}, tamiya_l:{num:'LP-7', name:'グレー', match:'近似'}, vallejo:{num:'70.992', name:'Neutral Grey', match:'近似'} },
-  { id:13, name:'スカイブルー', hex:'#87CEEB',
-    mr:{num:'C65', name:'インタミアブルー'}, tamiya_a:{num:'XF-23', name:'ライトブルー', match:'類似'}, tamiya_l:{num:'LP-74', name:'スカイブルー', match:'近似'}, vallejo:{num:'70.961', name:'Sky Blue', match:'近似'} },
-  { id:14, name:'クリアレッド', hex:'#FF000088',
-    mr:{num:'C47', name:'クリアレッド'}, tamiya_a:{num:'X-27', name:'クリアレッド', match:'近似'}, tamiya_l:{num:'LP-47', name:'クリアレッド', match:'近似'}, vallejo:{num:'70.934', name:'Transparent Red', match:'近似'} },
-  { id:15, name:'マホガニー', hex:'#C04000',
-    mr:{num:'C42', name:'マホガニー'}, tamiya_a:{num:'XF-64', name:'レッドブラウン', match:'類似'}, tamiya_l:{num:'LP-25', name:'マホガニー', match:'近似'}, vallejo:{num:'70.846', name:'Mahogany Brown', match:'近似'} },
-  { id:16, name:'ホワイトグレー', hex:'#E8E8E0',
-    mr:{num:'C35', name:'明灰白色'}, tamiya_a:{num:'XF-12', name:'Jネービーグレー', match:'参考'}, tamiya_l:{num:'LP-38', name:'ライトグレー', match:'類似'}, vallejo:{num:'70.993', name:'White Grey', match:'近似'} },
-  { id:17, name:'ダークグリーン', hex:'#006400',
-    mr:{num:'C18', name:'ダークグリーン'}, tamiya_a:{num:'XF-61', name:'ダークグリーン', match:'近似'}, tamiya_l:{num:'LP-70', name:'ダークグリーン', match:'近似'}, vallejo:{num:'70.968', name:'Dark Green', match:'近似'} },
-  { id:18, name:'フラットレッド', hex:'#CC3333',
-    mr:{num:'C29', name:'オレンジレッド'}, tamiya_a:{num:'XF-7', name:'フラットレッド', match:'近似'}, tamiya_l:{num:'LP-23', name:'ブライトレッド', match:'類似'}, vallejo:{num:'70.926', name:'Red', match:'近似'} },
-  { id:19, name:'サンドイエロー', hex:'#C8A850',
-    mr:{num:'C39', name:'ダークイエロー'}, tamiya_a:{num:'XF-60', name:'ダークイエロー', match:'近似'}, tamiya_l:{num:'LP-17', name:'サンドイエロー', match:'近似'}, vallejo:{num:'70.978', name:'Dark Yellow', match:'近似'} },
-  { id:20, name:'プライマー', hex:'#B0A090',
-    mr:{num:'B524', name:'サーフェイサー1000'}, tamiya_a:{num:'87026', name:'ファインサーフェイサー', match:'近似'}, tamiya_l:{num:'', name:'（ラッカー系なし）', match:'参考'}, vallejo:{num:'70.601', name:'Surface Primer', match:'類似'} },
-];
-
-let currentResults = [];
-
-function searchPaints() {
-  const query = document.getElementById('s_query').value.toLowerCase().trim();
-  const maker = document.getElementById('s_maker').value;
-
-  let results = PAINTS;
-
-  if (query) {
-    results = results.filter(p => {
-      const nameMatch = p.name.toLowerCase().includes(query);
-      const mrMatch   = p.mr && (p.mr.num.toLowerCase().includes(query) || p.mr.name.toLowerCase().includes(query));
-      const taMatch   = p.tamiya_a && (p.tamiya_a.num.toLowerCase().includes(query) || p.tamiya_a.name.toLowerCase().includes(query));
-      const tlMatch   = p.tamiya_l && (p.tamiya_l.num.toLowerCase().includes(query) || p.tamiya_l.name.toLowerCase().includes(query));
-      const vaMatch   = p.vallejo && (p.vallejo.num.toLowerCase().includes(query) || p.vallejo.name.toLowerCase().includes(query));
-      return nameMatch || mrMatch || taMatch || tlMatch || vaMatch;
-    });
+  function switchTab(i) {
+    document.querySelectorAll('.tab').forEach((t,idx) => t.classList.toggle('active', idx===i));
+    document.querySelectorAll('.panel').forEach((p,idx) => p.classList.toggle('active', idx===i));
   }
 
-  renderResults(results, maker);
-}
-
-function renderResults(results, makerFilter) {
-  const container = document.getElementById('results');
-
-  if (results.length === 0) {
-    container.innerHTML = '<div class="no-result">該当する塗料が見つかりませんでした。<br><small>別のキーワードで試してください。</small></div>';
-    return;
-  }
-
-  const makerNames = { mr:'クレオス Mr.カラー', tamiya_a:'タミヤ アクリル', tamiya_l:'タミヤ ラッカー', vallejo:'ファレホ' };
-
-  let html = `<div class="result-count">${results.length}件見つかりました</div>`;
-
-  results.forEach(p => {
-    const makers = ['mr','tamiya_a','tamiya_l','vallejo'];
-    let equivHtml = '';
-
-    makers.forEach(m => {
-      if (!p[m] || !p[m].num) return;
-      if (makerFilter !== 'all' && makerFilter !== m) return;
-
-      const match     = p[m].match || '近似';
-      const matchClass = match==='近似' ? 'match-high' : match==='類似' ? 'match-mid' : 'match-low';
-
-      equivHtml += `
-        <div class="equiv-row">
-          <div class="equiv-swatch" style="background:${p.hex}"></div>
-          <div class="equiv-maker">${makerNames[m]}</div>
-          <div class="equiv-info">${p[m].num} ${p[m].name}</div>
-          <span class="equiv-match ${matchClass}">${match}</span>
-        </div>`;
-    });
-
-    if (!equivHtml) return;
-
-    html += `
-      <div class="color-card">
-        <div class="color-header">
-          <div class="color-swatch" style="background:${p.hex}"></div>
-          <div class="color-main">
-            <div class="color-name">${p.name}</div>
-            <div class="color-num">${p.mr ? p.mr.num + ' ' + p.mr.name : ''}</div>
-          </div>
-        </div>
-        <div class="equiv-list">
-          <div class="equiv-title">近似色・対応色</div>
-          ${equivHtml}
-        </div>
-      </div>`;
+  document.getElementById('p2_pitch').addEventListener('change', function(){
+    document.getElementById('p2_custom_wrap').style.display = this.value==='custom' ? 'block' : 'none';
   });
 
-  container.innerHTML = html;
-}
+  function addPart() {
+    const row = document.createElement('div');
+    row.className = 'part-row';
+    row.innerHTML = `<input type="number" placeholder="縦(cm)" class="part-h" min="0.1" step="0.1">
+      <span class="x">×</span>
+      <input type="number" placeholder="横(cm)" class="part-w" min="0.1" step="0.1">
+      <input type="number" placeholder="枚数" class="part-n" min="1" value="1" style="max-width:60px;">`;
+    document.getElementById('parts-list').appendChild(row);
+  }
 
-// 初期表示（全件）
-searchPaints();
+  function calcLeather() {
+    const rows = document.querySelectorAll('.part-row');
+    const loss = parseFloat(document.getElementById('p1_loss').value);
+    let net = 0;
+    let valid = false;
+    rows.forEach(row => {
+      const h = parseFloat(row.querySelector('.part-h').value);
+      const w = parseFloat(row.querySelector('.part-w').value);
+      const n = parseFloat(row.querySelector('.part-n').value) || 1;
+      if (h && w) { net += h * w * n; valid = true; }
+    });
+    if (!valid) { alert('パーツのサイズを入力してください'); return; }
+
+    const total = Math.ceil(net * loss);
+    const deci  = Math.ceil(total / 100 * 10) / 10;
+
+    document.getElementById('p1_area').textContent = total;
+    document.getElementById('p1_net').textContent  = Math.round(net);
+    document.getElementById('p1_deci').textContent = deci;
+
+    let tip = '';
+    if (deci <= 5)       tip = '💡 小さい作品です。端切れセットで十分まかなえる量です。';
+    else if (deci <= 15) tip = '💡 財布・小物サイズです。A4〜B4サイズの革が目安です。';
+    else if (deci <= 30) tip = '💡 中サイズの作品です。ハーフサイズの革（約40ds）が目安です。';
+    else                  tip = '💡 大きな作品です。フルサイズの革（約50〜80ds）が必要になる場合があります。';
+
+    document.getElementById('p1_tip').textContent = tip;
+    document.getElementById('p1_result').classList.add('show');
+  }
+
+  function calcStitch() {
+    const length = parseFloat(document.getElementById('p2_length').value);
+    const pitchSel = document.getElementById('p2_pitch').value;
+    const pitch = pitchSel === 'custom'
+      ? parseFloat(document.getElementById('p2_custom_pitch').value)
+      : parseFloat(pitchSel);
+
+    if (!length || !pitch) { alert('縫う長さと間隔を入力してください'); return; }
+
+    const holes    = Math.ceil(length * 10 / pitch) + 1;
+    const stitches = holes - 1;
+
+    document.getElementById('p2_holes').textContent    = holes;
+    document.getElementById('p2_stitches').textContent = stitches;
+    document.getElementById('p2_result').classList.add('show');
+  }
+
+  function calcThread() {
+    const length    = parseFloat(document.getElementById('p3_length').value);
+    const thickness = parseFloat(document.getElementById('p3_thickness').value);
+    const method    = parseFloat(document.getElementById('p3_method').value);
+
+    if (!length) { alert('縫う長さを入力してください'); return; }
+
+    const thread      = Math.ceil((length + thickness * 2) * method);
+    const threadM     = (thread / 100).toFixed(1);
+    const threadExtra = (thread * 1.2 / 100).toFixed(1);
+
+    document.getElementById('p3_thread').textContent       = thread;
+    document.getElementById('p3_thread_m').textContent     = threadM;
+    document.getElementById('p3_thread_extra').textContent = threadExtra;
+    document.getElementById('p3_result').classList.add('show');
+  }
 </script>
 </body>
 </html>
